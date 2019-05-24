@@ -101,11 +101,34 @@ class WhatsAppController {
     this.elements.btnSendDocument.on('click', e=>{
 
     })
+    this.elements.btnSendMicrophone.on('click', e=>{
+      this.elements.recordMicrophone.show()
+      this.elements.btnSendMicrophone.hide()
+      
+      let start = Date.now()
+      this._recordMicrophoneInterval = setInterval(()=> {
+        let time = Date.now() - start
+        this.elements.recordMicrophoneTimer.innerHTML =  Format.formatTime(time)
+      }, 100)
+    })
+    this.elements.btnCancelMicrophone.on('click', e=> {
+      this.closeRecordMicrophone()
+    })
+    this.elements.btnFinishMicrophone.on('click', e=> {
+      this.closeRecordMicrophone()
+    })
   }
 
   closeMenuAttach() {
     document.removeEventListener('click', this.closeMenuAttach)
     this.elements.menuAttach.removeClass('Open')
+  }
+
+  closeRecordMicrophone() {
+    this.elements.recordMicrophone.hide()
+    this.elements.btnSendMicrophone.show()
+    clearInterval(this._recordMicrophoneInterval)
+    this.elements.recordMicrophoneTimer.innerHTML =  Format.formatTime(0)
   }
 
   closeAllMainPanel() {
