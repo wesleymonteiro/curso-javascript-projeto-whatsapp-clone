@@ -134,7 +134,25 @@ class WhatsAppController {
     })
     this.elements.panelEmojis.querySelectorAll('.emojik').forEach(emoji=>{
       emoji.on('click', e=>{
-        this.elements.inputText.innerText += emoji.dataset.unicode
+        let img = this.elements.imgEmojiDefault.cloneNode()
+        img.style.cssText = emoji.style.cssText
+        img.dataset.unicode = emoji.dataset.unicode
+        img.alt = emoji.dataset.unicode
+
+        emoji.classList.forEach(name=>{
+          img.classList.add(name)
+        })
+
+        let cursor = window.getSelection()
+        if(!cursor.focusNode || cursor.focusNode.id != this.elements.inputText.id) {
+          this.elements.inputText.focus()
+          cursor = window.getSelection()
+        }
+        let range = document.createRange()
+        range = cursor.getRangeAt(0)
+        range.deleteContents()
+        range.insertNode(img)
+        range.setStartAfter(img)
         this.toogleInputPanel()
       })
     })
