@@ -117,6 +117,39 @@ class WhatsAppController {
     this.elements.btnFinishMicrophone.on('click', e=> {
       this.closeRecordMicrophone()
     })
+    this.elements.inputText.on('keypress', e=>{
+      if(e.key === 'Enter' && !e.ctrlKey) {
+        e.preventDefault()
+        this.elements.btnSend.click()
+      }
+    })
+    this.elements.inputText.on('keyup', e=>{
+      this.toogleInputPanel()
+    })
+    this.elements.btnSend.on('click', e=>{
+      console.log(this.elements.inputText.innerText)
+    })
+    this.elements.btnEmojis.on('click', e=>{
+      this.elements.panelEmojis.toggleClass('open')
+    })
+    this.elements.panelEmojis.querySelectorAll('.emojik').forEach(emoji=>{
+      emoji.on('click', e=>{
+        this.elements.inputText.innerText += emoji.dataset.unicode
+        this.toogleInputPanel()
+      })
+    })
+  }
+
+  toogleInputPanel(){
+    if(this.elements.inputText.innerHTML.length) {
+      this.elements.inputPlaceholder.hide()
+      this.elements.btnSendMicrophone.hide()
+      this.elements.btnSend.show()
+    } else {
+      this.elements.inputPlaceholder.show()
+      this.elements.btnSendMicrophone.show()
+      this.elements.btnSend.hide()
+    }
   }
 
   closeMenuAttach() {
