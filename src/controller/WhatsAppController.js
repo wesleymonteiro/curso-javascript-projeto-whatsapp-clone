@@ -1,6 +1,7 @@
 import {Format} from './../utils/Format'
 import {Prototype} from './../utils/Prototype'
 import {CameraController} from './CameraController'
+import {DocumentController} from './DocumentController'
 
 export class WhatsAppController {
   constructor() {
@@ -85,6 +86,26 @@ export class WhatsAppController {
       this.closeAllMainPanel()
       this.elements.panelDocumentPreview.addClass('open')
       this.elements.panelDocumentPreview.css({height: "calc(100% - 120px)"})
+      this.elements.inputDocument.click()
+    })
+    this.elements.inputDocument.on('change', e=>{
+        if (this.elements.inputDocument.files.length) {
+          let file = this.elements.inputDocument.files[0]
+          this._document = new DocumentController(file)
+          this._document.getPreviewData().then(data=>{
+            this.elements.imgPanelDocumentPreview.src = data.src
+            this.elements.infoPanelDocumentPreview.innerHTML = data.info
+            this.elements.imagePanelDocumentPreview.show()
+            this.elements.filePanelDocumentPreview.hide()
+          }).catch(e=>{
+            switch(file.type) {
+              default:
+            }
+            this.elements.filenamePanelDocumentPreview.innerHTML = file.name
+            this.elements.imagePanelDocumentPreview.hide()
+            this.elements.filePanelDocumentPreview.show()
+          })
+        }
     })
     this.elements.btnAttachContact.on('click', e=>{
       this.elements.modalContacts.show()
