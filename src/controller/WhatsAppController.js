@@ -92,6 +92,7 @@ export class WhatsAppController {
     this.elements.btnClosePanelCamera.on('click', e=>{
       this.elements.panelCamera.removeClass('open')
       this.elements.panelMessagesContainer.show()
+      this._camera.stop()
     })
     this.elements.btnClosePanelDocumentPreview.on('click', e=>{
       this.elements.panelDocumentPreview.removeClass('open')
@@ -101,6 +102,23 @@ export class WhatsAppController {
       this.elements.modalContacts.hide()
     })
     this.elements.btnTakePicture.on('click', e=>{
+      let imageData = this._camera.takePicture()
+      this.elements.pictureCamera.src = imageData
+      this.elements.pictureCamera.show()
+      this.elements.videoCamera.hide()
+      this.elements.btnReshootPanelCamera.show()
+      this.elements.containerTakePicture.hide()
+      this.elements.containerSendPicture.show()
+    })
+    this.elements.btnReshootPanelCamera.on('click', e=>{
+
+      this.elements.pictureCamera.hide()
+      this.elements.videoCamera.show()
+      this.elements.btnReshootPanelCamera.hide()
+      this.elements.containerTakePicture.show()
+      this.elements.containerSendPicture.hide()
+    })
+    this.elements.btnSendPicture.on('click', e=>{
 
     })
     this.elements.btnSendDocument.on('click', e=>{
@@ -116,10 +134,10 @@ export class WhatsAppController {
         this.elements.recordMicrophoneTimer.innerHTML =  Format.formatTime(time)
       }, 100)
     })
-    this.elements.btnCancelMicrophone.on('click', e=> {
+    this.elements.btnCancelMicrophone.on('click', e=>{
       this.closeRecordMicrophone()
     })
-    this.elements.btnFinishMicrophone.on('click', e=> {
+    this.elements.btnFinishMicrophone.on('click', e=>{
       this.closeRecordMicrophone()
     })
     this.elements.inputText.on('keypress', e=>{
