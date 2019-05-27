@@ -75,6 +75,7 @@ class WhatsAppController {
       this.elements.panelCamera.addClass('open')
       this.elements.panelCamera.css({height: "calc(100% - 120px)"})
       
+      this._camera = new CameraController(this.elements.videoCamera)
     })
     this.elements.btnAttachDocument.on('click', e=>{
       this.closeAllMainPanel()
