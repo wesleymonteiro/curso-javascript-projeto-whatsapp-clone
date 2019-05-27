@@ -1,4 +1,4 @@
-class Prototype {
+export class Prototype {
   static initElementPrototypes() {
     Element.prototype.hide = function() {
       this.style.display = 'none'
