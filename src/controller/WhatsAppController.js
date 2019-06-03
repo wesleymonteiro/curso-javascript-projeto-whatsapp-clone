@@ -1,6 +1,7 @@
 import {Format} from './../utils/Format'
 import {Prototype} from './../utils/Prototype'
 import {CameraController} from './CameraController'
+import {MicrophoneController} from './MicrophoneController'
 import {DocumentController} from './DocumentController'
 
 export class WhatsAppController {
@@ -149,7 +150,11 @@ export class WhatsAppController {
     this.elements.btnSendMicrophone.on('click', e=>{
       this.elements.recordMicrophone.show()
       this.elements.btnSendMicrophone.hide()
-      
+
+      this._microphone = new MicrophoneController()
+      this._microphone.on('play', audio=>{
+        this._microphone.startRecorder()
+      })
       let start = Date.now()
       this._recordMicrophoneInterval = setInterval(()=> {
         let time = Date.now() - start
@@ -157,9 +162,11 @@ export class WhatsAppController {
       }, 100)
     })
     this.elements.btnCancelMicrophone.on('click', e=>{
+      this._microphone.stopRecorder()
       this.closeRecordMicrophone()
     })
     this.elements.btnFinishMicrophone.on('click', e=>{
+      this._microphone.stopRecorder()
       this.closeRecordMicrophone()
     })
     this.elements.inputText.on('keypress', e=>{
