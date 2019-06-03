@@ -98,6 +98,7 @@ export class WhatsAppController {
             this.elements.imagePanelDocumentPreview.show()
             this.elements.filePanelDocumentPreview.hide()
           }).catch(e=>{
+            console.error(e)
             switch(file.type) {
               default:
             }
