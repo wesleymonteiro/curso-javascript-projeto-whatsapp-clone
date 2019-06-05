@@ -1,5 +1,6 @@
 import {Format} from './../utils/Format'
 import {Prototype} from './../utils/Prototype'
+import {Firebase} from './../utils/Firebase'
 import {CameraController} from './CameraController'
 import {MicrophoneController} from './MicrophoneController'
 import {DocumentController} from './DocumentController'
@@ -7,6 +8,8 @@ import {DocumentController} from './DocumentController'
 export class WhatsAppController {
   constructor() {
     Prototype.initElementPrototypes()
+    this._firebase = new Firebase()
+    this.initAuth()
     this.loadElements()
     this.initEvents()
   }
@@ -16,6 +19,17 @@ export class WhatsAppController {
 
     document.querySelectorAll('[id]').forEach(el=>{
       this.elements[Format.getCamelCase(el.id)] = el
+    })
+  }
+
+  initAuth() {
+    this._firebase.initAuth().then(response=>{
+      this._user = response.user
+      // this._token = response.token
+
+      this.elements.appContent.css({ display: 'flex' })
+    }).catch(e=>{
+      console.error(e)
     })
   }
 
@@ -154,12 +168,12 @@ export class WhatsAppController {
       this._microphone = new MicrophoneController()
       this._microphone.on('play', audio=>{
         this._microphone.startRecorder()
+        let start = Date.now()
+        this._recordMicrophoneInterval = setInterval(()=> {
+          let time = Date.now() - start
+          this.elements.recordMicrophoneTimer.innerHTML =  Format.formatTime(time)
+        }, 100)
       })
-      let start = Date.now()
-      this._recordMicrophoneInterval = setInterval(()=> {
-        let time = Date.now() - start
-        this.elements.recordMicrophoneTimer.innerHTML =  Format.formatTime(time)
-      }, 100)
     })
     this.elements.btnCancelMicrophone.on('click', e=>{
       this._microphone.stopRecorder()

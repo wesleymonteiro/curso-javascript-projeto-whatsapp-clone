@@ -4,7 +4,7 @@ export class MicrophoneController extends ClassEvent {
   constructor() {
     super()
 
-    this._mimeType = 'audio/webm'
+    this._mimeType = this.getMimeType()
     this._available = false
 
     navigator.mediaDevices.getUserMedia({
@@ -56,5 +56,14 @@ export class MicrophoneController extends ClassEvent {
       this._recorder.stop()
       this.stop()
     }
+  }
+
+  getMimeType() {
+    if (MediaRecorder.isTypeSupported('audio/mpeg'))
+      return 'audio/mpeg'
+    if (MediaRecorder.isTypeSupported('audio/wav'))
+      return 'audio/wav'
+
+    return 'audio/webm'
   }
 }
